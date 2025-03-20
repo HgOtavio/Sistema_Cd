@@ -73,7 +73,7 @@ $result = $conn->query($sql);
         <?php while ($row = $result->fetch_assoc()) : ?>
             <tr>
                 <td><?= htmlspecialchars($row['id_artista']) ?></td>
-                <td><?= htmlspecialchars($row['nome']) ?></td>
+                <td><?= htmlspecialchars($row['nomeArtista']) ?></td>
                 <td>
                     <form action="gerenciar_artista.php" method="post" style="display:inline;">
                         <input type="hidden" name="id_artista" value="<?= $row['id_artista'] ?>">
