@@ -1,15 +1,15 @@
 <?php
 session_start();
-include "../php/puro/conexao.php"; 
-
-// Verifica se o usuário está logado
 if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "cliente") {
     header("Location: ../php/login.php");
     exit();
 }
 
+// Conexão com o banco de dados
+include "../php/conexao.php";
+
 // Obtém o ID do usuário logado
-$id_usuario = $_SESSION['id_usuario'];
+$id_usuario = $_SESSION["id_usuario"];
 
 // Busca os dados do usuário no banco
 $query = "SELECT * FROM Usuario WHERE id_usuario = ?";
@@ -110,7 +110,7 @@ $stmt->close();
         <h2>Editar Dados</h2>
         <form action="salvar_edicao_cliente.php" method="POST" enctype="multipart/form-data">
             <?php if (!empty($usuario['foto_perfil'])): ?>
-                <img src="uploads/<?php echo htmlspecialchars($usuario['foto_perfil']); ?>" alt="Foto de Perfil">
+                <img src="../<?php echo htmlspecialchars($usuario['foto_perfil']); ?>" alt="Foto de Perfil">
             <?php endif; ?>
 
             <label for="foto_perfil">Alterar Foto de Perfil:</label>

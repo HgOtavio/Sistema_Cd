@@ -11,13 +11,22 @@ $result_cd = $conn->query($sql_cd);
 ?>
 
 <h3>Adicionar Novo Artista</h3>
-<form action="processar_artista.php" method="post">
+<form action="processar_artista.php" method="post" enctype="multipart/form-data">
     <label for="nomeArtista">Nome do Artista:</label>
     <input type="text" name="nomeArtista" required>
 
-    <label for="id_cd">Associar a um CD:</label>
-    <select name="id_cd" required>
-        <option value="">Selecione um CD</option>
+    <label for="descricao">Descrição do Artista:</label>
+    <textarea name="descricao" required></textarea>
+
+    <label for="dataNascimento">Data de Nascimento:</label>
+    <input type="date" name="dataNascimento" required>
+
+    <label for="fotoPerfil">Foto de Perfil:</label>
+    <input type="file" name="fotoPerfil" accept="image/*">
+
+    <label for="cds">Associar a CDs:</label>
+    <select name="cds[]" multiple required>
+        <option value="">Selecione um ou mais CDs</option>
         <?php
         while ($cd = $result_cd->fetch_assoc()) {
             echo "<option value='{$cd['id_cd']}'>{$cd['titulo']}</option>";

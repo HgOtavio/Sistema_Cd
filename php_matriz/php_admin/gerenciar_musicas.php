@@ -5,8 +5,8 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-// Consultar Músicas (incluindo tempo/duração)
-$sql_musica = "SELECT id_musica, nomeMusica, tempo FROM Musica";
+// Consultar Músicas (incluindo tempo/duração e áudio)
+$sql_musica = "SELECT id_musica, nomeMusica, tempo, audio FROM Musica";
 $result_musica = $conn->query($sql_musica);
 ?>
 
@@ -18,6 +18,7 @@ $result_musica = $conn->query($sql_musica);
             <th>ID da Música</th>
             <th>Nome da Música</th>
             <th>Duração</th>
+            <th>Áudio</th>
             <th>CDs Associados</th>
             <th>Ações</th>
         </tr>
@@ -45,11 +46,26 @@ $result_musica = $conn->query($sql_musica);
                 }
                 $cds_list = !empty($cds) ? implode(", ", $cds) : "Nenhum CD associado";
 
+                // Verificar se o arquivo de áudio existe e preparar o caminho
+                $audio_path = "../audio/" . $musica['id_musica'] . ".mp3"; // Atualizado para a pasta 'audio_files'
+                $audio_player = "";
+
+                // Verificar se o arquivo de áudio realmente existe
+                if (file_exists($audio_path)) {
+                    $audio_player = "<audio controls>
+                                        <source src='$audio_path' type='audio/mp3'>
+                                        Seu navegador não suporta o elemento de áudio.
+                                      </audio>";
+                } else {
+                    $audio_player = "Sem áudio";
+                }
+
                 // Exibir música com botões de editar e excluir
                 echo "<tr>
                         <td>{$musica['id_musica']}</td>
                         <td>{$musica['nomeMusica']}</td>
                         <td>" . number_format($musica['tempo'], 2) . " minutos</td>
+                        <td>{$audio_player}</td>
                         <td>{$cds_list}</td>
                         <td>
                             <a href='editar_musica.php?id_musica={$musica['id_musica']}'>Editar</a> |
@@ -62,7 +78,7 @@ $result_musica = $conn->query($sql_musica);
                 $stmt_cds->close();
             }
         } else {
-            echo "<tr><td colspan='5'>Nenhuma Música encontrada</td></tr>";
+            echo "<tr><td colspan='6'>Nenhuma Música encontrada</td></tr>";
         }
         ?>
     </tbody>

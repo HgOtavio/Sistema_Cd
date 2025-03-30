@@ -4,7 +4,7 @@ include "../php/conexao.php";
 
 // Verifica se o usuário está logado e é do tipo administrador
 if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "admin") {
-    header("Location: ..php//login.php");
+    header("Location: ../php/login.php");
     exit();
 }
 
@@ -17,7 +17,7 @@ if (!isset($_GET['id'])) {
 $id_usuario = $_GET['id'];
 
 // Consulta os dados do usuário a ser editado
-$result = $conn->query("SELECT * FROM Usuario WHERE id_usuario = $id_usuario AND tipo = 'cliente'");
+$result = $conn->query("SELECT * FROM Usuario WHERE id_usuario = $id_usuario");
 $usuario = $result->fetch_assoc();
 
 if (!$usuario) {
@@ -25,7 +25,7 @@ if (!$usuario) {
     exit();
 }
 
-// Se o formulário foi enviado, atualiza os dados do cliente
+// Se o formulário foi enviado, atualiza os dados do usuário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_completo = $_POST["nome_completo"];
     $email = $_POST["email"];
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $caminho_arquivo = "../php_cliente/uploads/" . $nome_arquivo;
 
         if (move_uploaded_file($_FILES["foto_perfil"]["tmp_name"], $caminho_arquivo)) {
-            $foto_perfil = "../php_cliente/uploads/" . $nome_arquivo;
+            $foto_perfil = "php_cliente/uploads/" . $nome_arquivo;
         } else {
             echo "Erro ao fazer upload da foto.";
             exit();
@@ -74,9 +74,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($stmt->execute()) {
-        header("Location: gerenciar_usuarios.php");
+        header("Location: admin_gerenciar_usuarios.php");
         exit();
     } else {
         echo "Erro ao atualizar os dados: " . $conn->error;
     }
 }
+?>

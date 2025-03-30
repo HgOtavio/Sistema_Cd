@@ -6,7 +6,7 @@ if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "cliente") {
 }
 
 // Conexão com o banco de dados
-include "../php/puro/conexao.php";
+include "../php/conexao.php";
 
 // Obtém o ID do usuário logado
 $id_usuario = $_SESSION["id_usuario"];

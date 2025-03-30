@@ -25,7 +25,7 @@ if ($result_cd->num_rows > 0) {
     // Verificar se a imagem foi carregada
     $capa = $_FILES['capa']['name'];
     $capa_tmp = $_FILES['capa']['tmp_name'];
-    $capa_path = "uploads/" . $capa;
+    $capa_path = "../imagens/" . $capa;
 
     // Mover a imagem para a pasta de uploads
     move_uploaded_file($capa_tmp, $capa_path);

@@ -7,11 +7,14 @@ if ($conn->connect_error) {
 
 // Verificar se o ID da música foi passado
 if (isset($_GET['id_musica'])) {
-    $id_musica = $_GET['id_musica'];
+    $id_musica = intval($_GET['id_musica']); // Garantir que o id_musica seja um número inteiro
 
     // Buscar dados da música
-    $sql_musica = "SELECT * FROM Musica WHERE id_musica = $id_musica";
-    $result_musica = $conn->query($sql_musica);
+    $sql_musica = "SELECT * FROM Musica WHERE id_musica = ?";
+    $stmt = $conn->prepare($sql_musica);
+    $stmt->bind_param("i", $id_musica);
+    $stmt->execute();
+    $result_musica = $stmt->get_result();
 
     if ($result_musica->num_rows > 0) {
         $musica = $result_musica->fetch_assoc();
@@ -22,8 +25,11 @@ if (isset($_GET['id_musica'])) {
     // Buscar CDs já associados à música
     $sql_cds_associados = "SELECT CD.id_cd, CD.titulo FROM CD_Musica 
                            JOIN CD ON CD_Musica.id_cd = CD.id_cd 
-                           WHERE CD_Musica.id_musica = $id_musica";
-    $result_cds_associados = $conn->query($sql_cds_associados);
+                           WHERE CD_Musica.id_musica = ?";
+    $stmt = $conn->prepare($sql_cds_associados);
+    $stmt->bind_param("i", $id_musica);
+    $stmt->execute();
+    $result_cds_associados = $stmt->get_result();
     $cds_associados = [];
     while ($cd = $result_cds_associados->fetch_assoc()) {
         $cds_associados[] = $cd;
@@ -42,14 +48,18 @@ if (isset($_GET['id_musica'])) {
 ?>
 
 <h3>Editar Música</h3>
-<form action="salvar_edicao_musica.php" method="post">
-    <input type="hidden" name="id_musica" value="<?php echo $musica['id_musica']; ?>">
+<form action="salvar_edicao_musica.php" method="post" enctype="multipart/form-data">
+    <!-- Passar o id_musica no formulário -->
+    <input type="hidden" name="id_musica" value="<?php echo $id_musica; ?>">
 
     <label for="nomeMusica">Nome da Música:</label>
-    <input type="text" name="nomeMusica" value="<?php echo $musica['nomeMusica']; ?>" required><br><br>
+    <input type="text" name="nomeMusica" value="<?php echo isset($musica['nomeMusica']) ? $musica['nomeMusica'] : ''; ?>" required><br><br>
 
     <label for="tempo">Duração (em minutos):</label>
-    <input type="text" name="tempo" value="<?php echo $musica['tempo']; ?>" required><br><br>
+    <input type="text" name="tempo" value="<?php echo isset($musica['tempo']) ? $musica['tempo'] : ''; ?>" required><br><br>
+
+    <label for="audio">Áudio:</label>
+    <input type="file" name="audio" accept="audio/mp3, audio/wav"><br><br> <!-- Restringindo a tipos de áudio -->
 
     <label for="cds_associados">CDs Associados:</label><br>
     <?php

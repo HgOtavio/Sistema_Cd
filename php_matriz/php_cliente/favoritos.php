@@ -1,12 +1,14 @@
 <?php
 session_start();
 if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "cliente") {
-    header("Location: ../login.php");
+    header("Location: ../php/login.php");
     exit();
 }
 
-include "../conexao.php";
+// Conexão com o banco de dados
+include "../php/conexao.php";
 
+// Obtém o ID do usuário logado
 $id_usuario = $_SESSION["id_usuario"];
 
 // Consulta para buscar os CDs favoritos do usuário

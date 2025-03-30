@@ -8,12 +8,26 @@ if ($conn->connect_error) {
 // Receber dados do formulário
 $id_artista = intval($_POST['id_artista']);
 $nomeArtista = trim($_POST['nomeArtista']);
+$descricao = trim($_POST['descricao']);
+$dataNascimento = $_POST['dataNascimento'];
 $cds = isset($_POST['cds']) ? $_POST['cds'] : [];
+$fotoPerfil = null; // Inicializa a variável de foto como null
 
-// Atualizar nome do artista
-$sql_update = "UPDATE Artista SET nomeArtista = ? WHERE id_artista = ?";
+// Verificar se a foto foi enviada
+if ($_FILES['fotoPerfil']['error'] == 0) {
+    // Definir o caminho para o upload da foto
+    $fotoPerfil = "../Artista" . basename($_FILES['fotoPerfil']['name']);
+    
+    // Mover o arquivo para o diretório de uploads
+    if (!move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $fotoPerfil)) {
+        die("Erro ao fazer upload da foto.");
+    }
+}
+
+// Atualizar nome, data de nascimento, descrição e foto do artista
+$sql_update = "UPDATE Artista SET nomeArtista = ?, descricao = ?, dataNascimento = ?, fotoPerfil = ? WHERE id_artista = ?";
 $stmt_update = $conn->prepare($sql_update);
-$stmt_update->bind_param("si", $nomeArtista, $id_artista);
+$stmt_update->bind_param("ssssi", $nomeArtista, $descricao, $dataNascimento, $fotoPerfil, $id_artista);
 $stmt_update->execute();
 $stmt_update->close(); // Fechando a declaração para liberar memória
 
@@ -39,6 +53,6 @@ if (!empty($cds)) {
 $conn->close();
 
 // Redirecionar para a página de gerenciamento
-header("Location: gerenciar_artistas.php");
+header("Location: gerenciar_artista.php");
 exit();
 ?>

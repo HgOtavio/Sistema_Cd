@@ -1,27 +1,15 @@
 <?php
-// Conexão com o banco de dados (ajuste conforme necessário)
-$servername = "localhost";  // ou o servidor do seu banco
-$username = "root";         // ou seu usuário do banco
-$password = "";             // ou sua senha do banco
-$dbname = "LojaCDs";        // nome do seu banco de dados
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verifica se a conexão foi bem-sucedida
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
-}
-?>
-
-<?php
-// Inicia a sessão para verificar se o usuário está logado
 session_start();
-if (!isset($_SESSION['id_usuario'])) {
-    echo "Você precisa estar logado para acessar o carrinho!";
-    exit;
+if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "cliente") {
+    header("Location: ../php/login.php");
+    exit();
 }
 
-$user_id = $_SESSION['id_usuario'];  // ID do usuário logado
+// Conexão com o banco de dados
+include "../php/conexao.php";
+
+// Obtém o ID do usuário logado
+$id_usuario = $_SESSION["id_usuario"];
 
 // Consulta SQL para buscar os itens no carrinho
 $sql = "SELECT Carrinho.id, CD.id_cd, CD.titulo, CD.capa, Carrinho.quantidade, CD.preco, IFNULL(Promocao.desconto, 0) AS desconto, CD.disponibilidade

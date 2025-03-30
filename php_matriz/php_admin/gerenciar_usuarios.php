@@ -1,10 +1,15 @@
 <?php
-// Conexão com o banco de dados
-$conn = new mysqli("localhost", "root", "", "LojaCDs");
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
+session_start();
+include "../php/conexao.php";
+
+// Verifica se o usuário está logado e é do tipo administrador
+if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "admin") {
+    header("Location: ../php/login.php");
+    exit();
 }
 
+// Obtém o id do usuário logado
+$id_usuario = $_SESSION['id_usuario'];
 
 // Busca todos os usuários do tipo "cliente"
 $result = $conn->query("SELECT * FROM Usuario WHERE tipo = 'cliente'");

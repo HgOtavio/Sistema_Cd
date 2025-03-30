@@ -1,10 +1,10 @@
 <?php
 session_start();
-include "../conexao.php";
+include "../php/conexao.php";
 
 // Verifique se o usuário está logado
 if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "cliente") {
-    header("Location: ../login.php");
+    header("Location: ../php/login.php");
     exit();
 }
 

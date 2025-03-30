@@ -5,12 +5,12 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-// Verifica se o ID do CD foi recebido
-if (!isset($_POST['id_cd']) || !is_numeric($_POST['id_cd'])) {
+// Verifica se o ID do CD foi recebido e é um número válido
+if (!isset($_GET['id_cd']) || !is_numeric($_GET['id_cd'])) {
     die("ID do CD inválido.");
 }
 
-$id_cd = intval($_POST['id_cd']);
+$id_cd = intval($_GET['id_cd']);
 
 // Remover associações do CD com artistas
 $sql_delete_artistas = "DELETE FROM CD_Artista WHERE id_cd = ?";
@@ -35,8 +35,10 @@ if ($stmt_delete_cd->execute()) {
     echo "Erro ao excluir o CD.";
 }
 
-// Fechar conexão e redirecionar
+// Fechar a conexão
 $conn->close();
-header("Location: gerenciar_cds.php");
+
+// Redirecionar para a página de gerenciamento de CDs após a exclusão
+header("Location: gerenciar_cd.php");
 exit();
 ?>
