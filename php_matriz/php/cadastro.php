@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Cadastro de Usuário</h2>
-    <form action="../cadastro.php" method="POST">
+    <form action="confirmar_cadastro.php" method="POST">
         Nome Completo: <input type="text" name="nome_completo" required><br>
         E-mail: <input type="email" name="email" required><br>
         CPF: <input type="text" name="cpf" required><br>

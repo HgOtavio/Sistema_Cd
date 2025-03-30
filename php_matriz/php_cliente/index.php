@@ -1,12 +1,12 @@
 <?php
 session_start();
 if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "cliente") {
-    header("Location: ../php/login.php");
+    header("Location: ../login.php");
     exit();
 }
 
 // Conexão com o banco de dados
-include "../php/puro/conexao.php";
+include "../../conexao.php";
 
 // Obtém o ID do usuário logado
 $id_usuario = $_SESSION["id_usuario"];

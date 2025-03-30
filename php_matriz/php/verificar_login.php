@@ -42,14 +42,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redireciona conforme o tipo de usuário
             if ($tipo_usuario == "admin") {
-                header("Location: ../../php_admin/index.php");
+                header("Location: ../php_admin/index.php");
             } else {
-                header("Location: ../../php_cliente/index.php");
+                header("Location: ../php_cliente/index.php");
             }
             exit();
         } else {
             // Redireciona para login.php se a senha ou login estiverem incorretos
-            header("Location: ../login.php?erro=1");
+            header("Location: login.php?erro=1");
             exit();
         }
     } else {
