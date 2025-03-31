@@ -127,7 +127,7 @@ $foto_exibida = $foto_perfil ? $foto_perfil : 'default-avatar.png';
             <li><a href="favoritos.php">Favoritos</a></li>
             <li><a href="sugestao.php">Sugerir Novos CDs</a></li>
             <li><a href="historico_de_compra.php">Histórico de Compras</a></li>
-            <li><a href="../logout.php">Sair</a></li>
+            <li><a href="../php/logout.php">Sair</a></li>
         </ul>
 
         
